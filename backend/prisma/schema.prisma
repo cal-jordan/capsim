@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id       Int      @id @default(autoincrement())
+  text     String
+  type     QuestionType
+  answers  Answer[]
+  submissions SubmissionAnswer[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  text       String
+  points     Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int
+  submissions SubmissionAnswer[]
+}
+
+model Submission {
+  id         Int                  @id @default(autoincrement())
+  createdAt  DateTime             @default(now())
+  totalScore Int
+  maxScore   Int
+  answers    SubmissionAnswer[]
+}
+
+model SubmissionAnswer {
+  id           Int        @id @default(autoincrement())
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  submissionId Int
+  question     Question   @relation(fields: [questionId], references: [id])
+  questionId   Int
+  answer       Answer     @relation(fields: [answerId], references: [id])
+  answerId     Int
+}
+
+enum QuestionType {
+  single
+  multiple
+}
