@@ -1,4 +1,4 @@
-# Capsim Project
+# Capsim - Quiz
 
 This project consists of a frontend and backend application. Below are the detailed setup instructions for both parts.
 
